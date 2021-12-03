@@ -71,11 +71,14 @@ fn read_input() -> Result<Vec<Instruction>> {
     let mut instructions = vec![];
     for line in stdin.lock().lines() {
         let line = line?;
-        let instruction = match line.split_once(' ').unwrap() {
+        let instruction = match line
+            .split_once(' ')
+            .ok_or(format!("malformed line: {}", line))?
+        {
             ("forward", dist) => Instruction::Forward(dist.parse()?),
             ("up", dist) => Instruction::Up(dist.parse()?),
             ("down", dist) => Instruction::Down(dist.parse()?),
-            _ => Err("unexpected instruction")?,
+            inst => Err(format!("unexpected instruction {:?}", inst))?,
         };
         instructions.push(instruction);
     }
