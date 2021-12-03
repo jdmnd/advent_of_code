@@ -14,7 +14,7 @@ fn part_one(input: &[Vec<bool>]) {
     println!("part_one");
     let width = input[0].len();
     let most_common = (0..width)
-        .map(|bit_n| input.iter().map(|num| num[bit_n]).filter(|&b| b).count() > input.len() / 2)
+        .map(|bit_n| input.iter().filter(|num| num[bit_n]).count() > input.len() / 2)
         .collect::<Vec<_>>();
     let least_common = most_common.iter().map(|b| !b).collect::<Vec<_>>();
     println!(
@@ -43,7 +43,7 @@ fn choose_for_criteria(input: &[Vec<bool>], criteria: bool) -> &Vec<bool> {
     let width = input[0].len();
     let mut numbers = input.iter().collect::<Vec<_>>();
     for bit_n in 0..width {
-        let count_true = numbers.iter().map(|num| num[bit_n]).filter(|&b| b).count();
+        let count_true = numbers.iter().filter(|num| num[bit_n]).count();
         let bit_value_to_retain = (count_true * 2 >= numbers.len()) ^ criteria;
         numbers.retain(|num| num[bit_n] == bit_value_to_retain);
         if numbers.len() == 1 {
