@@ -1,4 +1,3 @@
-use std::cmp::Ordering;
 use std::io::{self, BufRead};
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
@@ -44,17 +43,9 @@ fn choose_for_criteria(input: &[Vec<bool>], criteria: bool) -> &Vec<bool> {
     let width = input[0].len();
     let mut numbers = input.iter().collect::<Vec<_>>();
     for bit_n in 0..width {
-        let count_criteria = numbers
-            .iter()
-            .map(|num| num[bit_n])
-            .filter(|&b| b == criteria)
-            .count();
-        let to_retain = match (count_criteria * 2).cmp(&numbers.len()) {
-            Ordering::Greater => true,
-            Ordering::Less => false,
-            Ordering::Equal => criteria,
-        };
-        numbers.retain(|num| num[bit_n] == to_retain);
+        let count_true = numbers.iter().map(|num| num[bit_n]).filter(|&b| b).count();
+        let bit_value_to_retain = (count_true * 2 >= numbers.len()) ^ criteria;
+        numbers.retain(|num| num[bit_n] == bit_value_to_retain);
         if numbers.len() == 1 {
             break;
         }
