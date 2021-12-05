@@ -80,9 +80,7 @@ impl Bingo {
     fn is_winning_grid(grid: &Grid) -> bool {
         grid.iter()
             .any(|row| row.iter().all(|cell| cell.is_marked()))
-            || (0..5)
-                .map(|idx| grid.iter().map(|row| row[idx]).collect::<Vec<_>>())
-                .any(|col| col.iter().all(|cell| cell.is_marked()))
+            || (0..5).any(|idx| grid.iter().map(|row| row[idx]).all(|cell| cell.is_marked()))
     }
 
     fn draw_number(&mut self) -> Option<u8> {
