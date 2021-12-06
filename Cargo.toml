@@ -8,25 +8,25 @@ edition = "2021"
 [dependencies]
 
 [[bin]]
-name = "one"
-path = "src/one/main.rs"
+name = "day_01"
+path = "src/day_01/main.rs"
 
 [[bin]]
-name = "two"
-path = "src/two/main.rs"
+name = "day_02"
+path = "src/day_02/main.rs"
 
 [[bin]]
-name = "three"
-path = "src/three/main.rs"
+name = "day_03"
+path = "src/day_03/main.rs"
 
 [[bin]]
-name = "four"
-path = "src/four/main.rs"
+name = "day_04"
+path = "src/day_04/main.rs"
 
 [[bin]]
-name = "five"
-path = "src/five/main.rs"
+name = "day_05"
+path = "src/day_05/main.rs"
 
 [[bin]]
-name = "six"
-path = "src/six/main.rs"
+name = "day_06"
+path = "src/day_06/main.rs"
