@@ -12,44 +12,39 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn fold_coords(coords: &mut BTreeSet<(i32, i32)>, fold: Fold) {
-    let mut after_fold: BTreeSet<_> = coords
-        .iter()
-        .filter_map(|&(x, y)| match fold {
+fn fold_coords(coords: BTreeSet<(i32, i32)>, fold: Fold) -> BTreeSet<(i32, i32)> {
+    coords
+        .into_iter()
+        .map(|(x, y)| match fold {
             Fold::Horizontal(fold_y) => {
                 if y > fold_y {
-                    Some((x, fold_y - (fold_y - y).abs()))
+                    (x, fold_y - (fold_y - y).abs())
                 } else {
-                    None
+                    (x, y)
                 }
             }
             Fold::Vertical(fold_x) => {
                 if x > fold_x {
-                    Some((fold_x - (fold_x - x).abs(), y))
+                    (fold_x - (fold_x - x).abs(), y)
                 } else {
-                    None
+                    (x, y)
                 }
             }
         })
-        .collect();
-    coords.retain(|&(x, y)| match fold {
-        Fold::Horizontal(fold_y) => y < fold_y,
-        Fold::Vertical(fold_x) => x < fold_x,
-    });
-    coords.append(&mut after_fold);
+        .collect()
 }
 
 fn part_1(input: &Input) {
     let fold = input.folds[0];
     let mut coords = input.dot_coords.iter().map(|&c| c).collect();
-    fold_coords(&mut coords, fold);
+    coords = fold_coords(coords, fold);
     println!("After fold = ({}) {:?}", coords.len(), coords);
 }
 
 fn part_2(input: &Input) {
     let mut coords = input.dot_coords.iter().map(|&c| c).collect();
     for &fold in &input.folds {
-        fold_coords(&mut coords, fold);
+        coords = fold_coords(coords, fold);
     }
     println!("After all folds = ({}) {:?}", coords.len(), coords);
     let &max_x = coords.iter().map(|(x, _)| x).max().unwrap();
