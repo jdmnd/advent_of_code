@@ -147,28 +147,12 @@ fn eval(packet: &Packet) -> u64 {
             Maximum => values.iter().map(eval).max().unwrap(),
             Minimum => values.iter().map(eval).min().unwrap(),
         },
-        BinaryOperator(op, a, b) => match op {
-            GreaterThan => {
-                if eval(a) > eval(b) {
-                    1
-                } else {
-                    0
-                }
-            }
-            LessThan => {
-                if eval(a) < eval(b) {
-                    1
-                } else {
-                    0
-                }
-            }
-            EqualTo => {
-                if eval(a) == eval(b) {
-                    1
-                } else {
-                    0
-                }
-            }
-        },
+        BinaryOperator(op, a, b) => {
+            (match op {
+                GreaterThan => eval(a) > eval(b),
+                LessThan => eval(a) < eval(b),
+                EqualTo => eval(a) == eval(b),
+            } as u64)
+        }
     }
 }
