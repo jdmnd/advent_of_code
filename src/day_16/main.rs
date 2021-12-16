@@ -47,14 +47,11 @@ fn read_input() -> Result<Vec<u8>> {
     let stdin = io::stdin();
     stdin.read_line(&mut input)?;
     let input = input.trim();
-    let mut offset = 0;
-    let mut bytes = Vec::new();
-    while offset < input.len() {
-        let byte_hex = &input[offset..offset + 2];
-        assert_eq!(byte_hex.len(), 2);
-        bytes.push(u8::from_str_radix(byte_hex, 16)?);
-        offset += 2;
-    }
+    assert_eq!(input.len() % 2, 0);
+    let bytes = (0..input.len())
+        .step_by(2)
+        .map(|i| u8::from_str_radix(&input[i..i + 2], 16))
+        .collect::<std::result::Result<_, _>>()?;
     Ok(bytes)
 }
 
@@ -83,13 +80,13 @@ fn parse_packet(bits: &mut &BitSlice<Msb0, u8>) -> Result<Packet> {
         let length_type_id = take_bits(1)[0];
         if length_type_id {
             // number of sub-packets
-            let count_subpackets: u16 = (take_bits(11)).load_be();
+            let count_subpackets: u16 = take_bits(11).load_be();
             for _ in 0..count_subpackets {
                 packets.push(parse_packet(bits)?);
             }
         } else {
             // total length in bits
-            let count_bits: usize = (take_bits(15)).load_be();
+            let count_bits: usize = take_bits(15).load_be();
             let mut packets_buf = take_bits(count_bits);
             while packets_buf.any() {
                 packets.push(parse_packet(&mut packets_buf)?);
