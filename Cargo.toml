@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 array2d = "0.2.1"
 bitvec = "0.22.3"
+regex = "1.5.4"
 
 [[bin]]
 name = "day_01"
@@ -72,3 +73,7 @@ path = "src/day_15/main.rs"
 [[bin]]
 name = "day_16"
 path = "src/day_16/main.rs"
+
+[[bin]]
+name = "day_17"
+path = "src/day_17/main.rs"
